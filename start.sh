@@ -7,7 +7,7 @@ printf '{
   },
   "agents":{
     "defaults":{
-      "model":"groq/llama-3.3-70b-versatile"
+      "model":"groq/meta-llama/llama-4-maverick-17b-128e-instruct"
     }
   }
 }' > /tmp/.openclaw/openclaw.json
