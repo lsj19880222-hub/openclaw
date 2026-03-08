@@ -1,7 +1,7 @@
 #!/bin/sh
 mkdir -p /tmp/.openclaw
 
-cat > /tmp/.openclaw/openclaw.json << 'EOF'
+cat > /tmp/.openclaw/openclaw.json << EOF
 {
   "gateway": {
     "bind": "lan",
@@ -12,27 +12,23 @@ cat > /tmp/.openclaw/openclaw.json << 'EOF'
   },
   "agents": {
     "defaults": {
-      "model": "groq/meta-llama/llama-4-maverick-17b-128e-instruct",
-      "apiKey": "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"
+      "model": "groq/meta-llama/llama-4-maverick-17b-128e-instruct"
     }
   },
-  "channels": [
-    {
-      "type": "telegram",
-      "token": "8649583026:AAGcEUWw8nVMrmkREnmcVNzKyzL6JSVhWa8"
+  "channels": {
+    "telegram": {
+      "token": "$TELEGRAM_BOT_TOKEN"
     },
-    {
-       "type": "feishu",
-      "appId": "cli_a927137e4d78dbc7",
-      "appSecret": "uAxIOZfqcpQpgGSC07RbQh7TQ3bQonDo",
-      "verificationToken": "Hh5OeGRLSHXlB4x0lRlGlbdzMfpkch3I",
-      "encryptKey": "0mvIVE3MDzVQn7fra6NuxtSkNfUJkvtM"
+    "feishu": {
+      "appId": "$FEISHU_APP_ID",
+      "appSecret": "$FEISHU_APP_SECRET",
+      "verificationToken": "$FEISHU_VERIFICATION_TOKEN",
+      "encryptKey": "$FEISHU_ENCRYPT_KEY"
     }
-  ]
+  }
 }
 EOF
 
-# 启动网关，后台生成预批准链接
 node openclaw.mjs gateway --port 8080 --allow-unconfigured &
 GATEWAY_PID=$!
 
