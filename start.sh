@@ -17,13 +17,17 @@ cat > /tmp/.openclaw/openclaw.json << EOF
   },
   "channels": {
     "telegram": {
-      "token": "$TELEGRAM_BOT_TOKEN"
+      "botToken": "$TELEGRAM_BOT_TOKEN"
     },
     "feishu": {
-      "appId": "$FEISHU_APP_ID",
-      "appSecret": "$FEISHU_APP_SECRET",
-      "verificationToken": "$FEISHU_VERIFICATION_TOKEN",
-      "encryptKey": "$FEISHU_ENCRYPT_KEY"
+      "accounts": {
+        "main": {
+          "appId": "$FEISHU_APP_ID",
+          "appSecret": "$FEISHU_APP_SECRET",
+          "verificationToken": "$FEISHU_VERIFICATION_TOKEN",
+          "encryptKey": "$FEISHU_ENCRYPT_KEY"
+        }
+      }
     }
   }
 }
