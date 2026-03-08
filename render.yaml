@@ -2,7 +2,7 @@ services:
   - type: web
     name: openclaw
     runtime: docker
-    dockerCommand: "mkdir -p /tmp/.openclaw && printf '{\"gateway\":{\"bind\":\"lan\",\"controlUi\":{\"dangerouslyAllowHostHeaderOriginFallback\":true}}}' > /tmp/.openclaw/openclaw.json && node openclaw.mjs gateway --port 8080 --allow-unconfigured"
+    dockerCommand: "sh /app/start.sh"
     plan: free
     healthCheckPath: /health
     envVars:
@@ -16,3 +16,4 @@ services:
         value: /tmp/workspace
       - key: OPENCLAW_GATEWAY_TOKEN
         generateValue: true
+        
