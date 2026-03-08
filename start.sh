@@ -12,7 +12,7 @@ cat > /tmp/.openclaw/openclaw.json << EOF
   },
   "agents": {
     "defaults": {
-      "model": "groq/meta-llama/llama-4-maverick-17b-128e-instruct"
+      "model": "MY_MODEL"
     }
   },
   "channels": {
