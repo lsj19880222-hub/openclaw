@@ -1,43 +1,14 @@
 #!/bin/sh
 mkdir -p /tmp/.openclaw
 
-# 核心配置：明确指定 Groq 的 Llama 4 Maverick 视觉模型
-cat > /tmp/.openclaw/openclaw.json << EOF
-{
-  "gateway": {
-    "bind": "lan",
-    "controlUi": {
-      "dangerouslyAllowHostHeaderOriginFallback": true
-    }
-  },
-  "agents": {
-    "defaults": {
-      "model": "MY_MODEL"
-    }
-  },
-  "channels": {
-    "telegram": {
-      "botToken": "$TELEGRAM_BOT_TOKEN",
-      "dmPolicy": "open",
-      "allowFrom": ["*"],
-      "groupPolicy": "open",
-      "groupAllowFrom": ["*"]
-    },
-    "feishu": {
-      "accounts": {
-        "main": {
-          "appId": "$FEISHU_APP_ID",
-          "appSecret": "$FEISHU_APP_SECRET",
-          "verificationToken": "$FEISHU_VERIFICATION_TOKEN",
-          "encryptKey": "$FEISHU_ENCRYPT_KEY"
-        }
-      }
-    }
-  }
-}
-EOF
+# 核心配置：使用 printf 防止变量解析失败
+printf '{"gateway":{"bind":"lan","controlUi":{"dangerouslyAllowHostHeaderOriginFallback":true}},"agents":{"defaults":{"model":"%s"}},"channels":{"telegram":{"botToken":"%s","dmPolicy":"open","allowFrom":["*"],"groupPolicy":"open","groupAllowFrom":["*"]},"feishu":{"accounts":{"main":{"appId":"%s","appSecret":"%s","verificationToken":"%s","encryptKey":"%s"}}}}}' \
+"$MY_MODEL" \
+"$TELEGRAM_BOT_TOKEN" \
+"$FEISHU_APP_ID" \
+"$FEISHU_APP_SECRET" \
+"$FEISHU_VERIFICATION_TOKEN" \
+"$FEISHU_ENCRYPT_KEY" > /tmp/.openclaw/openclaw.json
 
-# 安装飞书依赖（针对 512MB 内存做的最小化尝试）
-cd /app && npm install --no-optional @larksuiteoapi/node-sdk 2>/dev/null || echo "Skip optional deps"
-
-exec node openclaw.mjs gateway --port 8080 --allow-unconfigured
+# 飞书：既然在线装不上，我命令你用轻量模式启动（至少保证不爆内存）
+node openclaw.mjs gateway --port 8080 --allow-unconfigured
