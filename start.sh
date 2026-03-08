@@ -1,5 +1,43 @@
 #!/bin/sh
 mkdir -p /tmp/.openclaw
-echo '{"gateway":{"controlUi":{"dangerouslyAllowHostHeaderOriginFallback":true}},"channels":{"telegram":{"botToken":"'"$TELEGRAM_BOT_TOKEN"'","dmPolicy":"open","allowFrom":["*"],"groupPolicy":"open","groupAllowFrom":["*"]},"feishu":{"accounts":{"main":{"appId":"'"$FEISHU_APP_ID"'","appSecret":"'"$FEISHU_APP_SECRET"'","verificationToken":"'"$FEISHU_VERIFICATION_TOKEN"'","encryptKey":"'"$FEISHU_ENCRYPT_KEY"'"}}}}}' > /tmp/.openclaw/openclaw.json
-cd /app && npm install --no-optional @larksuiteoapi/node-sdk 2>/dev/null
-exec node openclaw.mjs gateway --bind lan --port 8080 --allow-unconfigured
+
+# 核心配置：明确指定 Groq 的 Llama 4 Maverick 视觉模型
+cat > /tmp/.openclaw/openclaw.json << EOF
+{
+  "gateway": {
+    "bind": "lan",
+    "controlUi": {
+      "dangerouslyAllowHostHeaderOriginFallback": true
+    }
+  },
+  "agents": {
+    "defaults": {
+      "model": "groq/meta-llama/llama-4-maverick-17b-128e-instruct"
+    }
+  },
+  "channels": {
+    "telegram": {
+      "botToken": "$TELEGRAM_BOT_TOKEN",
+      "dmPolicy": "open",
+      "allowFrom": ["*"],
+      "groupPolicy": "open",
+      "groupAllowFrom": ["*"]
+    },
+    "feishu": {
+      "accounts": {
+        "main": {
+          "appId": "$FEISHU_APP_ID",
+          "appSecret": "$FEISHU_APP_SECRET",
+          "verificationToken": "$FEISHU_VERIFICATION_TOKEN",
+          "encryptKey": "$FEISHU_ENCRYPT_KEY"
+        }
+      }
+    }
+  }
+}
+EOF
+
+# 安装飞书依赖（针对 512MB 内存做的最小化尝试）
+cd /app && npm install --no-optional @larksuiteoapi/node-sdk 2>/dev/null || echo "Skip optional deps"
+
+exec node openclaw.mjs gateway --port 8080 --allow-unconfigured
