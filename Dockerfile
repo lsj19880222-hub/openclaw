@@ -5,7 +5,7 @@
 # bind mounts require BuildKit, which is not available in plain Docker.
 # This stage extracts only the package.json files we need from extensions/,
 # so the main build layer is not invalidated by unrelated extension source changes.
-ARG OPENCLAW_EXTENSIONS=""
+ARG OPENCLAW_EXTENSIONS="feishu"
 FROM node:22-bookworm@sha256:cd7bcd2e7a1e6f72052feb023c7f6b722205d3fcab7bbcbd2d1bfdab10b1e935 AS ext-deps
 ARG OPENCLAW_EXTENSIONS
 COPY extensions /tmp/extensions
