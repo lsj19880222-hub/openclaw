@@ -11,7 +11,7 @@ printf '{
   "models": {
     "providers": {
       "siliconflow": {
-        "api": "openai-completions",
+        "api": "openai",
         "baseUrl": "https://api.siliconflow.cn/v1",
         "apiKey": "%s",
         "models": [
@@ -37,6 +37,10 @@ printf '{
       "groupAllowFrom": ["*"]
     },
     "feishu": {
+      "dmPolicy": "open",
+      "allowFrom": ["*"],
+      "groupPolicy": "open",
+      "groupAllowFrom": ["*"],
       "accounts": {
         "main": {
           "appId": "%s",
