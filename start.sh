@@ -1,7 +1,6 @@
 #!/bin/sh
 mkdir -p /tmp/.openclaw
 
-# 核心配置：注入硅基流动 (SiliconFlow) 作为模型供应商
 printf '{
   "gateway": {
     "bind": "lan",
@@ -9,16 +8,24 @@ printf '{
       "dangerouslyAllowHostHeaderOriginFallback": true
     }
   },
-  "modelProviders": {
-    "siliconflow": {
-      "api": "openai",
-      "baseUrl": "https://api.siliconflow.cn/v1",
-      "apiKey": "%s"
+  "models": {
+    "providers": {
+      "siliconflow": {
+        "api": "openai-completions",
+        "baseUrl": "https://api.siliconflow.cn/v1",
+        "apiKey": "%s",
+        "models": [
+          {
+            "id": "%s",
+            "name": "%s"
+          }
+        ]
+      }
     }
   },
   "agents": {
     "defaults": {
-      "model": "siliconflow:%s"
+      "model": "siliconflow/%s"
     }
   },
   "channels": {
@@ -42,6 +49,8 @@ printf '{
   }
 }' \
 "$SILICONFLOW_API_KEY" \
+"$MY_MODEL" \
+"$MY_MODEL" \
 "$MY_MODEL" \
 "$TELEGRAM_BOT_TOKEN" \
 "$FEISHU_APP_ID" \
