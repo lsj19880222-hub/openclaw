@@ -11,7 +11,7 @@ printf '{
   "models": {
     "providers": {
       "siliconflow": {
-        "api": "openai-completions",
+        "api": "openai-responses",
         "baseUrl": "https://api.siliconflow.cn/v1",
         "apiKey": "%s",
         "models": [
